@@ -1,0 +1,83 @@
+/* eleicao: */
+
+CREATE TABLE localidade (
+    id_localidade INTEGER PRIMARY KEY,
+    cep VARCHAR
+);
+
+CREATE TABLE zona (
+    id_zona INTEGER PRIMARY KEY,
+    numero VARCHAR,
+    fk_localidade_id_localidade INTEGER
+);
+
+CREATE TABLE secoes (
+    id_secoes INTEGER PRIMARY KEY,
+    numero VARCHAR
+);
+
+CREATE TABLE eleitor_voto (
+    id_eleitor INTEGER,
+    nome VARCHAR,
+    fk_secoes_id_secoes INTEGER,
+    id_voto INTEGER,
+    fk_candidato_id_candidato INTEGER,
+    PRIMARY KEY (id_eleitor, id_voto)
+);
+
+CREATE TABLE candidato (
+    id_candidato INTEGER PRIMARY KEY,
+    cargo VARCHAR,
+    numero VARCHAR
+);
+
+CREATE TABLE partido (
+    id_partido INTEGER PRIMARY KEY,
+    sigla VARCHAR,
+    nome VARCHAR
+);
+
+CREATE TABLE possui (
+    fk_zona_id_zona INTEGER,
+    fk_secoes_id_secoes INTEGER
+);
+
+CREATE TABLE escolhe (
+    fk_partido_id_partido INTEGER,
+    fk_candidato_id_candidato INTEGER
+);
+ 
+ALTER TABLE zona ADD CONSTRAINT FK_zona_2
+    FOREIGN KEY (fk_localidade_id_localidade)
+    REFERENCES localidade (id_localidade)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE eleitor_voto ADD CONSTRAINT FK_eleitor_voto_2
+    FOREIGN KEY (fk_secoes_id_secoes)
+    REFERENCES secoes (id_secoes)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE eleitor_voto ADD CONSTRAINT FK_eleitor_voto_3
+    FOREIGN KEY (fk_candidato_id_candidato)
+    REFERENCES candidato (id_candidato)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE possui ADD CONSTRAINT FK_possui_1
+    FOREIGN KEY (fk_zona_id_zona)
+    REFERENCES zona (id_zona)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE possui ADD CONSTRAINT FK_possui_2
+    FOREIGN KEY (fk_secoes_id_secoes)
+    REFERENCES secoes (id_secoes)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE escolhe ADD CONSTRAINT FK_escolhe_1
+    FOREIGN KEY (fk_partido_id_partido)
+    REFERENCES partido (id_partido)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE escolhe ADD CONSTRAINT FK_escolhe_2
+    FOREIGN KEY (fk_candidato_id_candidato)
+    REFERENCES candidato (id_candidato)
+    ON DELETE RESTRICT;
